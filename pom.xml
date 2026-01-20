@@ -74,14 +74,19 @@
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.3.0</version>
+		</dependency>
 
 		<!-- Swagger OpenAPI UI -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>1.7.0</version>
-		</dependency>
-	</dependencies>
+		</dependency>-->
+	</dependencies> 
 
 	<build>
 		<plugins>
@@ -131,11 +136,4 @@
 			</releases>
 		</pluginRepository>
 	</pluginRepositories>
-
-    <!-- Swagger OpenAPI UI -->
-    <dependency>
-        <groupId>org.springdoc</groupId>
-        <artifactId>springdoc-openapi-ui</artifactId>
-        <version>1.7.0</version>
-    </dependency>
 </project>
