@@ -3,6 +3,7 @@ package com.example.staysphere.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.example.staysphere.entity.Property;
 import com.example.staysphere.repository.PropertyRepository;
@@ -18,11 +19,13 @@ public class PropertyController {
     private PropertyRepository propertyRepository;
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public List<Property> getAllProperties() {
         return propertyRepository.findAll();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public ResponseEntity<Property> getPropertyById(@PathVariable Long id) {
         Optional<Property> property = propertyRepository.findById(id);
         return property.map(ResponseEntity::ok)
@@ -30,11 +33,13 @@ public class PropertyController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public Property createProperty(@RequestBody Property property) {
         return propertyRepository.save(property);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public ResponseEntity<Property> updateProperty(@PathVariable Long id, @RequestBody Property propertyDetails) {
         return propertyRepository.findById(id)
             .map(property -> {
@@ -47,6 +52,7 @@ public class PropertyController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public ResponseEntity<Void> deleteProperty(@PathVariable Long id) {
         return propertyRepository.findById(id)
             .map(property -> {

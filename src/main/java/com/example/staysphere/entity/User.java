@@ -16,9 +16,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @jakarta.persistence.Convert(converter = com.example.staysphere.security.AesGcmEncryptor.class)
     private String name;
 
     @Column(unique = true, nullable = false)
+    @jakarta.persistence.Convert(converter = com.example.staysphere.security.AesGcmEncryptor.class)
     private String email;
 
     private String password;

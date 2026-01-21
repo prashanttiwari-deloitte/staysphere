@@ -3,6 +3,7 @@ package com.example.staysphere.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.example.staysphere.entity.Room;
 import com.example.staysphere.repository.RoomRepository;
@@ -18,11 +19,13 @@ public class RoomController {
     private RoomRepository roomRepository;
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public List<Room> getAllRooms() {
         return roomRepository.findAll();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public ResponseEntity<Room> getRoomById(@PathVariable Long id) {
         Optional<Room> room = roomRepository.findById(id);
         return room.map(ResponseEntity::ok)
@@ -30,15 +33,16 @@ public class RoomController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public Room createRoom(@RequestBody Room room) {
         return roomRepository.save(room);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public ResponseEntity<Room> updateRoom(@PathVariable Long id, @RequestBody Room roomDetails) {
         return roomRepository.findById(id)
             .map(room -> {
-                room.setRoomNumber(roomDetails.getRoomNumber());
                 room.setType(roomDetails.getType());
                 room.setPrice(roomDetails.getPrice());
                 room.setProperty(roomDetails.getProperty());
@@ -48,6 +52,7 @@ public class RoomController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {
         return roomRepository.findById(id)
             .map(room -> {
