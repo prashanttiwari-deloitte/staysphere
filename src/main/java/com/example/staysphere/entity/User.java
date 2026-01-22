@@ -32,6 +32,9 @@ public class User {
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private List<Property> properties;
 
+    @OneToMany(mappedBy = "guest", cascade = CascadeType.ALL)
+    private List<Booking> bookings;
+
     public enum Role {
         GUEST,
         PROPERTY_MANAGER,

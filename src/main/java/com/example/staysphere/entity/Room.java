@@ -20,8 +20,14 @@ public class Room {
 
     private Double price;
 
+    private boolean availability;
+
     // Many rooms belong to one property
     @ManyToOne
     @JoinColumn(name = "property_id")
     private Property property;
+
+    @ManyToMany
+    @JoinColumn(name="booking_id")
+    private Booking booking;
 }
