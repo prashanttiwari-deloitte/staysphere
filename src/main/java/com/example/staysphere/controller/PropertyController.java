@@ -18,27 +18,27 @@ public class PropertyController {
     @Autowired
     private PropertyRepository propertyRepository;
 
-    @GetMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
+    @GetMapping("getAll")
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public List<Property> getAllProperties() {
         return propertyRepository.findAll();
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
+    @GetMapping("get/{id}")
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public ResponseEntity<Property> getPropertyById(@PathVariable Long id) {
         Optional<Property> property = propertyRepository.findById(id);
         return property.map(ResponseEntity::ok)
                        .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public Property createProperty(@RequestBody Property property) {
         return propertyRepository.save(property);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("update/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public ResponseEntity<Property> updateProperty(@PathVariable Long id, @RequestBody Property propertyDetails) {
         return propertyRepository.findById(id)
@@ -51,7 +51,7 @@ public class PropertyController {
             .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public ResponseEntity<Void> deleteProperty(@PathVariable Long id) {
         return propertyRepository.findById(id)

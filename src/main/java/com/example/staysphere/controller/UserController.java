@@ -20,7 +20,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping
+    @GetMapping("getAll")
     @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public List<UserResponse> getAllUsers() {
         return userRepository.findAll().stream()
@@ -28,7 +28,7 @@ public class UserController {
             .toList();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         Optional<User> user = userRepository.findById(id);
@@ -38,13 +38,13 @@ public class UserController {
         
     }
 
-    @PostMapping
+    @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public User createUser(@RequestBody User user) {
         return userRepository.save(user);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
         return userRepository.findById(id)
@@ -58,7 +58,7 @@ public class UserController {
             .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         return userRepository.findById(id)
