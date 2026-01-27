@@ -19,6 +19,7 @@ import java.util.Optional;
 import com.example.staysphere.entity.Room;
 import java.util.List;
 import java.util.ArrayList;
+import static java.time.Instant.now;
 
 
 
@@ -45,7 +46,7 @@ public class BookingService {
         String checkOutDate = bookingRequest.getCheckOutDate();
         boolean allRoomsAvailable = true;
         List<Room> rooms = new ArrayList<>();
-        List<InventoryHold> holdsToCreate = new ArrayList<>();
+        //List<InventoryHold> holdsToCreate = new ArrayList<>();
         for(Long roomId : bookingRequest.getRoomIds()){
             // Use pessimistic lock to prevent concurrent modifications
             Optional<Room> roomOpt = roomRepository.findById(roomId);
@@ -53,8 +54,8 @@ public class BookingService {
                 Room room = roomOpt.get();
                 // Check for overlapping holds
                 List<InventoryHold> overlappingHolds = inventoryHoldRepository
-                    .findByRoomIdAndHoldEndDateGreaterThanAndHoldStartDateLessThan(
-                        roomId, checkInDate, checkOutDate
+                    .findByRoomIdAndHoldEndDateGreaterThanAndHoldStartDateLessThanAndExpiresAtLessThan(
+                        roomId, checkInDate, checkOutDate, now().toString()
                     );
                 if(overlappingHolds != null && !overlappingHolds.isEmpty()){
                     allRoomsAvailable = false;
@@ -65,7 +66,7 @@ public class BookingService {
         }
         if(!guest.isPresent() || rooms.isEmpty() || !allRoomsAvailable){
             booking.setStatus(Status.FAILED);
-            booking.setStatusChangedAt(java.time.Instant.now().toString());
+            booking.setStatusChangedAt(now().toString());
         }else{
             booking.setGuest(guest.get());
             booking.setRoomsBooked(rooms);
@@ -73,13 +74,13 @@ public class BookingService {
             booking.setCheckOutDate(checkOutDate);  
             booking.setTotalAmount(bookingRequest.getTotalAmount());
             booking.setStatus(Status.REQUESTED);
-            booking.setStatusChangedAt(java.time.Instant.now().toString());
+            booking.setStatusChangedAt(now().toString());
             booking.setBookingDate(bookingRequest.getBookingDate());
             bookingRepository.save(booking);
 
             // Create InventoryHold for each room
-            String now = java.time.Instant.now().toString();
-            String expiresAt = java.time.Instant.now().plusSeconds(15 * 60).toString(); // 15 min TTL
+            String now = now().toString();
+            String expiresAt = now().plusSeconds(15 * 60).toString(); // 15 minutes temperary hold
             for(Room room : rooms){
                 InventoryHold hold = new InventoryHold();
                 hold.setRoom(room);

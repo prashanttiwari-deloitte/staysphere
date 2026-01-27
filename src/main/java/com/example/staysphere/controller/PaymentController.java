@@ -7,6 +7,7 @@ import com.example.staysphere.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import static java.time.Instant.now;
 
 import java.util.Optional;
 
@@ -50,7 +51,7 @@ public class PaymentController {
         intent.setBooking(bookingOpt.get());
         intent.setAmount(amount);
         intent.setStatus(PaymentIntent.Status.AUTHORIZED);
-        String now = java.time.Instant.now().toString();
+        String now = now().toString();
         intent.setCreatedAt(now);
         intent.setUpdatedAt(now);
         intent.setIdempotencyKey(idempotencyKey);
@@ -71,7 +72,7 @@ public class PaymentController {
             return ResponseEntity.status(409).build();
         }
         intent.setStatus(PaymentIntent.Status.CAPTURED);
-        intent.setUpdatedAt(java.time.Instant.now().toString());
+        intent.setUpdatedAt(now().toString());
         paymentIntentRepository.save(intent);
         return ResponseEntity.ok(intent);
     }

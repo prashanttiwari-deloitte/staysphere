@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Base64;
+import static java.time.Instant.now;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -81,7 +82,7 @@ public class BookingController {
                 record.setIdempotencyKey(idempotencyKey);
                 record.setRequestHash(requestHash);
                 record.setResponseBody(serializeResponse(response));
-                record.setCreatedAt(java.time.Instant.now().toString());
+                record.setCreatedAt(now().toString());
                 idempotencyRecordRepository.save(record);
             }
 
@@ -91,7 +92,7 @@ public class BookingController {
         }
     }
 
-    // Simple hash function for BookingRequest (can be improved for production)
+    // Simple hash function for BookingRequest 
     private String hashBookingRequest(BookingRequest req) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         String raw = req.toString(); // Assumes BookingRequest.toString() is deterministic
