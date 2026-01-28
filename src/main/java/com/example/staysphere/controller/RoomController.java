@@ -18,13 +18,13 @@ public class RoomController {
     @Autowired
     private RoomRepository roomRepository;
 
-    @GetMapping
+    @GetMapping("getAll")
     @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public List<Room> getAllRooms() {
         return roomRepository.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("get/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public ResponseEntity<Room> getRoomById(@PathVariable Long id) {
         Optional<Room> room = roomRepository.findById(id);
@@ -32,13 +32,13 @@ public class RoomController {
                    .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public Room createRoom(@RequestBody Room room) {
         return roomRepository.save(room);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("update/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public ResponseEntity<Room> updateRoom(@PathVariable Long id, @RequestBody Room roomDetails) {
         return roomRepository.findById(id)
@@ -51,7 +51,7 @@ public class RoomController {
             .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {
         return roomRepository.findById(id)

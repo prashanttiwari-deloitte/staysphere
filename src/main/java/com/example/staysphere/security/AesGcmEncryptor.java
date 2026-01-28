@@ -16,7 +16,7 @@ public class AesGcmEncryptor implements AttributeConverter<String, String> {
     private static final String ENCRYPT_ALGO = "AES/GCM/NoPadding";
     private static final int GCM_IV_LENGTH = 12;
     private static final int GCM_TAG_LENGTH = 128;
-    private static final String SECRET = "ReplaceWith32ByteSecretKeyForAESGCM!"; // 32 bytes for AES-256
+    private static final String SECRET = "u8X2pQw9zL4eR7sV1bG6jK3mT0cN5hQ2";
 
     private final SecretKey secretKey;
 
