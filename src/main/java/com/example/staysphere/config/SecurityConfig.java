@@ -33,7 +33,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
                 .requestMatchers("/api/users/**").hasRole("ADMIN")
                 .requestMatchers("/api/properties/**").permitAll()
-                .requestMatchers("/api/rooms/**").hasAnyRole("ADMIN", "PROPERTY_MANAGER")
+                .requestMatchers("/api/rooms/**").permitAll()
+                //.requestMatchers("/api/rooms/**").hasAnyRole("ADMIN", "PROPERTY_MANAGER")
                 .anyRequest().authenticated()
             );
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

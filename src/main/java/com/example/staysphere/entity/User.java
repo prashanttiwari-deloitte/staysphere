@@ -1,5 +1,6 @@
 package com.example.staysphere.entity;
 
+import com.example.staysphere.security.AesGcmEncryptor;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.example.staysphere.security.AesGcmEncryptor;
 
 @Entity
 @Table(name = "users")
@@ -22,7 +24,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @jakarta.persistence.Convert(converter = com.example.staysphere.security.AesGcmEncryptor.class)
+    @Convert(converter = AesGcmEncryptor.class)
     private String name;
 
     @Column(unique = true, nullable = false)
@@ -39,6 +41,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Property> properties;
+
+    @OneToMany(mappedBy = "guest", cascade = CascadeType.ALL)
+    private List<Booking> bookings;
 
     public enum Role {
         GUEST,

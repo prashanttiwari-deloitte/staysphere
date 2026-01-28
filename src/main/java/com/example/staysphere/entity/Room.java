@@ -1,5 +1,7 @@
 package com.example.staysphere.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,8 +22,15 @@ public class Room {
 
     private Double price;
 
+    private boolean availability=true;
+
     // Many rooms belong to one property
     @ManyToOne
     @JoinColumn(name = "property_id")
+    @JsonBackReference
     private Property property;
+
+    @ManyToOne
+    @JoinColumn(name="booking_id")
+    private Booking booking;
 }
