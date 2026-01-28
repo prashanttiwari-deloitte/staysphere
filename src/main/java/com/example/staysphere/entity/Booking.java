@@ -26,8 +26,8 @@ public class Booking {
     @JoinColumn(name="guest_id")
     private User guest;
 
-    @OneToMany(mappedBy = "booking", cascade = CascadeType.DETACH)
-    private List<Room> roomsBooked;
+   @OneToMany(mappedBy = "booking", cascade = CascadeType.DETACH)
+   private List<Room> roomsBooked;
 
     private String checkInDate;
     private String checkOutDate;

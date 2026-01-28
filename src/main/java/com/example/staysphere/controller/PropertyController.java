@@ -9,12 +9,15 @@ import org.springframework.security.core.Authentication;
 import com.example.staysphere.entity.Property;
 import com.example.staysphere.repository.PropertyRepository;
 import com.example.staysphere.repository.UserRepository;
+import com.example.staysphere.service.PropertyService;
 
 import java.util.List;
 import java.util.Optional;
 import org.springframework.security.core.context.SecurityContextHolder;
 import com.example.staysphere.dto.PropertyRequest;
 import com.example.staysphere.entity.User;
+import com.example.staysphere.dto.PropertyResponse;
+import com.example.staysphere.entity.Room;
 
 @RestController
 @RequestMapping("/api/properties")
@@ -26,10 +29,15 @@ public class PropertyController {
     @Autowired 
     private UserRepository userRepository;
 
+     @Autowired
+    private PropertyService propertyService;
+
     @GetMapping("getAll")
     //@PreAuthorize("hasRole('ADMIN') or hasRole('PROPERTY_MANAGER')")
-    public List<Property> getAllProperties() {
-        return propertyRepository.findAll();
+    public ResponseEntity<List<PropertyResponse>> getAllProperties() {
+        List<PropertyResponse> responses = propertyService.getAllProperties();
+        return ResponseEntity.ok(responses);
+
     }
 
     @GetMapping("get/{id}")
@@ -51,9 +59,14 @@ public class PropertyController {
             Optional<User> userOpt = userRepository.findByEmail(auth.getName()); 
             
             Property property = new Property();
+            List<Room> rooms = propertyRequest.getRooms().stream()
+            .map(room ->{
+                room.setProperty(property);
+                return room;
+            }).toList();
             property.setName(propertyRequest.getName());
             property.setAddress(propertyRequest.getAddress());
-            property.setRooms(propertyRequest.getRooms());
+            property.setRooms(rooms);
             property.setOwner(userOpt.get());
             Property result = propertyRepository.save(property);
             return ResponseEntity.ok(result);

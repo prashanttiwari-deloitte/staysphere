@@ -69,7 +69,7 @@ public class BookingService {
             booking.setStatusChangedAt(now().toString());
         }else{
             booking.setGuest(guest.get());
-            booking.setRoomsBooked(rooms);
+            //booking.setRoomsBooked(rooms);
             booking.setCheckInDate(checkInDate);
             booking.setCheckOutDate(checkOutDate);  
             booking.setTotalAmount(bookingRequest.getTotalAmount());
@@ -109,11 +109,11 @@ public class BookingService {
         response.setCheckOutDate(booking.getCheckOutDate());
         response.setBookingDate(booking.getBookingDate());
         response.setStatus(booking.getStatus().toString()); 
-        Double totalAmount = booking.getRoomsBooked().stream()
-            .mapToDouble(Room::getPrice).sum();
-        response.setTotalAmount(totalAmount);
-        List<Long> roomIds = booking.getRoomsBooked().stream()
-        .map(Room::getId).toList();
+       Double totalAmount = booking.getRoomsBooked().stream()
+           .mapToDouble(Room::getPrice).sum();
+       response.setTotalAmount(totalAmount);
+       List<Long> roomIds = booking.getRoomsBooked().stream()
+       .map(Room::getId).toList();
         response.setRoomIds(roomIds);
         return response;
 

@@ -1,5 +1,6 @@
 package com.example.staysphere.entity;
 
+import com.example.staysphere.security.AesGcmEncryptor;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.example.staysphere.security.AesGcmEncryptor;
 
 @Entity
 @Table(name = "users")
